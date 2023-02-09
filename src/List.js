@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import Form from 'react-bootstrap/Form';
 import ListGroup from 'react-bootstrap/ListGroup';
 import {DateTime} from 'luxon';
 
@@ -6,25 +7,36 @@ const ENDPOINT = '/api/releases';
 
 function List() {
   const [releases, setReleases] = useState([]);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
-    fetch(ENDPOINT)
+    fetch(`${ENDPOINT}?query=${encodeURIComponent(query)}`)
       .then(response => response.json())
       .then(result => setReleases(result));
-  }, []);
+  }, [query]);
+
+  const onQueryChange = event => {
+    setQuery(event.target.value);
+  };
 
   return (
-    <ListGroup>
-      {releases.map(release => {
-        const publishedAt = DateTime.fromISO(release.published_at);
+    <>
+      <Form>
+        <Form.Control type='text' placeholder='Search by version…' value={query} onChange={onQueryChange}/>
+      </Form>
 
-        return (
-          <ListGroup.Item key={release.id} action href={release.html_url}>
-            {release.tag_name} on {publishedAt.toLocaleString()}
-          </ListGroup.Item>
-        );
-      })}
-    </ListGroup>
+      <ListGroup>
+        {releases.map(release => {
+          const publishedAt = DateTime.fromISO(release.published_at);
+
+          return (
+            <ListGroup.Item key={release.id} action href={release.html_url}>
+              {release.tag_name} on {publishedAt.toLocaleString()}
+            </ListGroup.Item>
+          );
+        })}
+      </ListGroup>
+    </>
   );
 }
 

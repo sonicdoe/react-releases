@@ -2,16 +2,26 @@ export const config = {
   runtime: 'edge',
 };
 
-const GITHUB_ENDPOINT = 'https://api.github.com/repos/facebook/react/releases';
+const PROXY_ENDPOINT = 'https://react-releases-sonicdoe.vercel.app/api/proxy';
 
-export default async () => {
-  const response = await fetch(GITHUB_ENDPOINT);
-  const body = await response.blob();
+function filterReleases(releases, query) {
+  if (!query) {
+    return releases;
+  }
 
-  return new Response(body, {
+  return releases.filter(release => release.tag_name.startsWith(query));
+}
+
+export default async req => {
+  const url = new URL(req.url);
+  const query = url.searchParams.get('query');
+
+  const response = await fetch(PROXY_ENDPOINT);
+  const releases = await response.json();
+  const filteredReleases = filterReleases(releases, query);
+
+  return new Response(JSON.stringify(filteredReleases), {
     headers: {
-      // Cache for a week to avoid running into GitHub’s rate limit.
-      'Cache-Control': 'public, max-age=604800',
       'Content-Type': 'application/json',
       'X-RateLimit-Limit': response.headers.get('X-RateLimit-Limit'),
       'X-RateLimit-Remaining': response.headers.get('X-RateLimit-Remaining'),

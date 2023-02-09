@@ -7,7 +7,19 @@ function App() {
   const [releases, setReleases] = useState([]);
 
   useEffect(() => {
-    fetch(GITHUB_ENDPOINT)
+    async function getResponse() {
+      const cache = await caches.open('github');
+      const match = await cache.match(GITHUB_ENDPOINT);
+
+      if (match) {
+        return match;
+      }
+
+      await cache.add(GITHUB_ENDPOINT);
+      return cache.match(GITHUB_ENDPOINT);
+    }
+
+    getResponse(GITHUB_ENDPOINT)
       .then(response => response.json())
       .then(result => setReleases(result));
   }, []);

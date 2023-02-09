@@ -31,7 +31,7 @@ function List() {
         const publishedAt = DateTime.fromISO(release.published_at);
 
         return (
-          <ListGroup.Item key={release.id}>
+          <ListGroup.Item key={release.id} action href={release.html_url}>
             {release.tag_name} on {publishedAt.toLocaleString()}
           </ListGroup.Item>
         );

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
+import {DateTime} from 'luxon';
 
 const GITHUB_ENDPOINT = 'https://api.github.com/repos/facebook/react/releases';
 
@@ -26,11 +27,15 @@ function List() {
 
   return (
     <ListGroup>
-      {releases.map(release => (
-        <ListGroup.Item key={release.id}>
-          {release.tag_name} on {release.published_at}
-        </ListGroup.Item>
-      ))}
+      {releases.map(release => {
+        const publishedAt = DateTime.fromISO(release.published_at);
+
+        return (
+          <ListGroup.Item key={release.id}>
+            {release.tag_name} on {publishedAt.toLocaleString()}
+          </ListGroup.Item>
+        );
+      })}
     </ListGroup>
   );
 }

@@ -2,25 +2,13 @@ import React, {useEffect, useState} from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import {DateTime} from 'luxon';
 
-const GITHUB_ENDPOINT = 'https://api.github.com/repos/facebook/react/releases';
+const ENDPOINT = '/api/releases';
 
 function List() {
   const [releases, setReleases] = useState([]);
 
   useEffect(() => {
-    async function getResponse() {
-      const cache = await caches.open('github');
-      const match = await cache.match(GITHUB_ENDPOINT);
-
-      if (match) {
-        return match;
-      }
-
-      await cache.add(GITHUB_ENDPOINT);
-      return cache.match(GITHUB_ENDPOINT);
-    }
-
-    getResponse(GITHUB_ENDPOINT)
+    fetch(ENDPOINT)
       .then(response => response.json())
       .then(result => setReleases(result));
   }, []);

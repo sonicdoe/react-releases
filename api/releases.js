@@ -9,7 +9,14 @@ function filterReleases(releases, query) {
     return releases.slice(0, 15);
   }
 
-  return releases.filter(release => release.tag_name.startsWith(query));
+  return releases.filter(release => {
+    const tagName = release.tag_name;
+    // Ignore `v` prefix when filtering.
+    const versionNumber = tagName.replace('v', '');
+    const normalizedQuery = query.replace('v', '');
+
+    return versionNumber.startsWith(normalizedQuery);
+  });
 }
 
 export default async req => {

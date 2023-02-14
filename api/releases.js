@@ -6,7 +6,7 @@ const PROXY_ENDPOINT = 'https://react-releases-sonicdoe.vercel.app/api/proxy';
 
 function filterReleases(releases, query) {
   if (!query) {
-    return releases;
+    return releases.slice(0, 15);
   }
 
   return releases.filter(release => release.tag_name.startsWith(query));

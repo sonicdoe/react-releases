@@ -50,7 +50,7 @@ function List() {
 
           return (
             <ListGroup.Item key={release.id} action href={release.html_url}>
-              {release.tag_name} on {publishedAt.toLocaleString()}
+              <span className='font-monospace'>{release.tag_name}</span> on {publishedAt.toLocaleString()}
             </ListGroup.Item>
           );
         })}

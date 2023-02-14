@@ -44,7 +44,7 @@ function List() {
         <Form.Control type='text' placeholder='Search by version…' value={query} onChange={onQueryChange}/>
       </Form>
 
-      <ListGroup>
+      <ListGroup variant='flush'>
         {releases.map(release => {
           const publishedAt = DateTime.fromISO(release.published_at);
 

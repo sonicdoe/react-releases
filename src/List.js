@@ -36,7 +36,11 @@ function List() {
 
   return (
     <>
-      <Form className='mb-2'>
+      <Form
+        className='mb-2' onSubmit={event => {
+          event.preventDefault();
+        }}
+      >
         <Form.Control type='text' placeholder='Search by version…' value={query} onChange={onQueryChange}/>
       </Form>
 

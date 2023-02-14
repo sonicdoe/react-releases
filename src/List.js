@@ -36,7 +36,7 @@ function List() {
 
   return (
     <>
-      <Form>
+      <Form className='mb-2'>
         <Form.Control type='text' placeholder='Search by version…' value={query} onChange={onQueryChange}/>
       </Form>
 

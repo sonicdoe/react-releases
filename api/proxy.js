@@ -5,7 +5,11 @@ export const config = {
 const GITHUB_ENDPOINT = 'https://api.github.com/repos/facebook/react/releases';
 
 export default async () => {
-  const response = await fetch(GITHUB_ENDPOINT);
+  const response = await fetch(GITHUB_ENDPOINT, {
+    headers: {
+      Accept: 'application/vnd.github+json',
+    },
+  });
   const body = await response.blob();
 
   return new Response(body, {

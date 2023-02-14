@@ -17,6 +17,8 @@ export default async () => {
   const releases = await octokit.paginate(octokit.rest.repos.listReleases, {
     owner: GITHUB_OWNER,
     repo: GITHUB_REPO,
+    // As of 2023-02-14, there are 99 releases, so we wouldn’t need to paginate.
+    // Still, we keep this here to demonstrate the ability and future-proof.
     // eslint-disable-next-line camelcase
     per_page: 100,
   }, response => {

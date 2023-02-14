@@ -2,25 +2,28 @@ export const config = {
   runtime: 'edge',
 };
 
-const GITHUB_ENDPOINT = 'https://api.github.com/repos/facebook/react/releases';
+import {Octokit} from '@octokit/rest';
+
+const GITHUB_OWNER = 'facebook';
+const GITHUB_REPO = 'react';
+
+const octokit = new Octokit();
 
 export default async () => {
-  const response = await fetch(GITHUB_ENDPOINT, {
-    headers: {
-      Accept: 'application/vnd.github+json',
-    },
+  const response = await octokit.rest.repos.listReleases({
+    owner: GITHUB_OWNER,
+    repo: GITHUB_REPO,
   });
-  const body = await response.blob();
 
-  return new Response(body, {
+  return new Response(JSON.stringify(response.data), {
     headers: {
       // Cache for a week to avoid running into GitHub’s rate limit.
       'Cache-Control': 'public, max-age=604800',
       'Content-Type': 'application/json',
-      'X-RateLimit-Limit': response.headers.get('X-RateLimit-Limit'),
-      'X-RateLimit-Remaining': response.headers.get('X-RateLimit-Remaining'),
-      'X-RateLimit-Reset': response.headers.get('X-RateLimit-Reset'),
-      'X-RateLimit-Used': response.headers.get('X-RateLimit-Used'),
+      'X-RateLimit-Limit': response.headers['X-RateLimit-Limit'],
+      'X-RateLimit-Remaining': response.headers['X-RateLimit-Remaining'],
+      'X-RateLimit-Reset': response.headers['X-RateLimit-Reset'],
+      'X-RateLimit-Used': response.headers['X-RateLimit-Used'],
     },
   });
 };

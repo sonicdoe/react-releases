@@ -10,9 +10,24 @@ function List() {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    fetch(`${ENDPOINT}?query=${encodeURIComponent(query)}`)
+    const abortController = new AbortController();
+
+    fetch(`${ENDPOINT}?query=${encodeURIComponent(query)}`, {
+      signal: abortController.signal,
+    })
       .then(response => response.json())
-      .then(result => setReleases(result));
+      .then(result => setReleases(result))
+      .catch(error => {
+        if (error?.name === 'AbortError') {
+          return;
+        }
+
+        throw error;
+      });
+
+    return () => {
+      abortController.abort();
+    };
   }, [query]);
 
   const onQueryChange = event => {

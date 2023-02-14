@@ -90,6 +90,7 @@ function List() {
       <Form
         className='mb-2' onSubmit={event => {
           event.preventDefault();
+          document.activeElement.blur();
         }}
       >
         <Form.Control type='text' placeholder='Search by version…' value={query} onChange={onQueryChange}/>

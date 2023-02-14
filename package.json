@@ -4,7 +4,7 @@
   "license": "UNLICENSED",
   "repository": "sonicdoe/react-releases",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "vercel dev",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
